@@ -22,32 +22,45 @@ import { MeasurementGuideModal } from './components/MeasurementGuideModal';
 import { SavedCasesModal } from './components/SavedCasesModal';
 import { GoogleSheetSyncModal } from './components/GoogleSheetSyncModal';
 import { PrintCutSheet } from './components/PrintCutSheet';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import {
+  UserProfile,
+  getStoredUserProfile,
+  setStoredUserProfile,
+  clearStoredUserProfile,
+  getStoredGoogleClientId,
+} from './utils/auth';
+import { LoginScreen } from './components/LoginScreen';
 import { Heart, Sparkles } from 'lucide-react';
 
-const INITIAL_MEASUREMENTS: AnimalMeasurements = {
-  caseId: 'CK-2026-0001',
-  staffName: 'ช่างวิชัย (มูลนิธิฯ)',
-  petName: 'น้องโชคดี (ตัวอย่าง)',
-  ownerName: 'คุณอารีย์ (081-234-5678)',
+const createEmptyMeasurements = (staffName: string = ''): AnimalMeasurements => ({
+  caseId: generateCaseId(),
+  staffName: staffName,
+  petName: '',
+  ownerName: '',
   animalType: 'dog',
-  weight: 4.5,
-  A: 28, // ความสูงจากพื้นถึงหลังสะโพก
-  B: 16, // ความสูงจากพื้นถึงท้อง
-  G: 14, // ความกว้างลำตัว
-  H: 35, // ความยาวรอบอก
-  E: 24, // ความยาวจากหลังขาหน้าถึงกลางสะโพก
-  D: 10, // ความสูงจากพื้นถึงหน้าอก
-  notes: 'ขาหลังสองข้างอ่อนแรง ร่าเริง ทานอาหารได้ปกติ',
-};
+  weight: 0,
+  A: 0,
+  B: 0,
+  G: 0,
+  H: 0,
+  E: 0,
+  D: 0,
+  notes: '',
+});
 
 export function App() {
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => getStoredUserProfile());
+  const [clientId, setClientId] = useState<string>(() => getStoredGoogleClientId());
   const [currentStep, setCurrentStep] = useState<StepNumber>(1);
 
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     return localStorage.getItem('chakr_theme') === 'dark';
   });
 
-  const [measurements, setMeasurements] = useState<AnimalMeasurements>(INITIAL_MEASUREMENTS);
+  const [measurements, setMeasurements] = useState<AnimalMeasurements>(() =>
+    createEmptyMeasurements(getStoredUserProfile()?.name || '')
+  );
   const [wheelchairType, setWheelchairType] = useState<WheelchairType>('2_wheel');
   const [pipeSize, setPipeSize] = useState<PipeSize>('3_hun');
   const [isManualPipeSize, setIsManualPipeSize] = useState<boolean>(false);
@@ -106,22 +119,7 @@ export function App() {
 
   const handleReset = () => {
     if (confirm('คุณต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่?')) {
-      const newId = generateCaseId();
-      setMeasurements({
-        caseId: newId,
-        staffName: '',
-        petName: '',
-        ownerName: '',
-        animalType: 'dog',
-        weight: 0,
-        A: 0,
-        B: 0,
-        G: 0,
-        H: 0,
-        E: 0,
-        D: 0,
-        notes: '',
-      });
+      setMeasurements(createEmptyMeasurements(currentUser?.name || ''));
       setWheelchairType('2_wheel');
       setPipeSize('3_hun');
       setIsManualPipeSize(false);
@@ -134,10 +132,12 @@ export function App() {
 
   const handleLoadPreset = (preset: 'small_cat' | 'small_dog' | 'medium_dog' | 'large_dog') => {
     const cid = generateCaseId();
+    const currentStaff = currentUser?.name || measurements.staffName || 'ผู้คำนวณ';
+
     if (preset === 'small_cat') {
       setMeasurements({
         caseId: cid,
-        staffName: 'ทีมงานคลินิก',
+        staffName: currentStaff,
         petName: 'น้องส้ม (แมวไทย)',
         ownerName: 'คุณปิยะ',
         animalType: 'cat',
@@ -155,7 +155,7 @@ export function App() {
     } else if (preset === 'small_dog') {
       setMeasurements({
         caseId: cid,
-        staffName: 'ทีมงานมูลนิธิฯ',
+        staffName: currentStaff,
         petName: 'น้องปอมปอม (ปอมเมอเรเนียน)',
         ownerName: 'คุณกิตติ',
         animalType: 'dog',
@@ -173,7 +173,7 @@ export function App() {
     } else if (preset === 'medium_dog') {
       setMeasurements({
         caseId: cid,
-        staffName: 'ทีมงานสัตวแพทย์',
+        staffName: currentStaff,
         petName: 'น้องบราวนี่ (คอร์กี้)',
         ownerName: 'คุณวิภา',
         animalType: 'dog',
@@ -191,7 +191,7 @@ export function App() {
     } else if (preset === 'large_dog') {
       setMeasurements({
         caseId: cid,
-        staffName: 'ทีมช่างอาสา',
+        staffName: currentStaff,
         petName: 'เจ้าทองเอก (โกลเด้นฯ)',
         ownerName: 'คุณสุชาติ',
         animalType: 'dog',
@@ -323,26 +323,56 @@ export function App() {
     window.print();
   };
 
-  return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      
-      {/* Sticky Header */}
-      <Header
-        darkMode={darkMode}
-        isSavingSheet={isSavingSheet}
-        onToggleTheme={() => setDarkMode(!darkMode)}
-        onOpenSavedCases={() => setIsSavedCasesOpen(true)}
-        onOpenGoogleSheetSync={() => setIsGoogleSheetSyncOpen(true)}
-        onSaveToGoogleSheet={handleSaveToGoogleSheet}
-        onPrint={handlePrint}
-        onLoadPreset={handleLoadPreset}
-      />
+  const handleLogout = () => {
+    if (confirm('คุณต้องการออกจากระบบหรือไม่?')) {
+      clearStoredUserProfile();
+      setCurrentUser(null);
+      showToast('ออกจากระบบเรียบร้อย');
+    }
+  };
 
-      {/* Main Container */}
-      <main className="container no-print" style={{ flex: 1, padding: '1.25rem 1rem' }}>
+  if (!currentUser) {
+    return (
+      <GoogleOAuthProvider clientId={clientId || 'dummy-client-id'}>
+        <LoginScreen
+          darkMode={darkMode}
+          onToggleTheme={() => setDarkMode(!darkMode)}
+          clientId={clientId}
+          onUpdateClientId={(newId) => setClientId(newId)}
+          onLoginSuccess={(profile) => {
+            setStoredUserProfile(profile);
+            setCurrentUser(profile);
+            setMeasurements((prev) => ({ ...prev, staffName: profile.name }));
+            showToast(`ยินดีต้อนรับคุณ ${profile.name}`);
+          }}
+        />
+      </GoogleOAuthProvider>
+    );
+  }
+
+  return (
+    <GoogleOAuthProvider clientId={clientId || 'dummy-client-id'}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         
-        {/* Toast Notification */}
-        {toastMessage && (
+        {/* Sticky Header */}
+        <Header
+          darkMode={darkMode}
+          isSavingSheet={isSavingSheet}
+          userProfile={currentUser}
+          onLogout={handleLogout}
+          onToggleTheme={() => setDarkMode(!darkMode)}
+          onOpenSavedCases={() => setIsSavedCasesOpen(true)}
+          onOpenGoogleSheetSync={() => setIsGoogleSheetSyncOpen(true)}
+          onSaveToGoogleSheet={handleSaveToGoogleSheet}
+          onPrint={handlePrint}
+          onLoadPreset={handleLoadPreset}
+        />
+
+        {/* Main Container */}
+        <main className="container no-print" style={{ flex: 1, padding: '1.25rem 1rem' }}>
+          
+          {/* Toast Notification */}
+          {toastMessage && (
           <div
             className="animate-fade-in"
             style={{
@@ -483,7 +513,8 @@ export function App() {
         </div>
       </footer>
 
-    </div>
+      </div>
+    </GoogleOAuthProvider>
   );
 }
 export default App;

@@ -18,12 +18,25 @@ const WEBHOOK_STORAGE_KEY = 'chakr_apps_script_url';
 
 export function getAppsScriptUrl(): string {
   const customUrl = localStorage.getItem(WEBHOOK_STORAGE_KEY);
-  if (customUrl && customUrl.trim()) return customUrl.trim();
+  if (customUrl && customUrl.trim()) {
+    const trimmed = customUrl.trim();
+    // ถ้าเคยเผลอเซฟ redirect echo URL ชั่วคราว ให้ลบทิ้งแล้วใช้ DEFAULT_APPS_SCRIPT_URL ที่ถูกต้อง
+    if (trimmed.includes('script.googleusercontent.com')) {
+      console.warn('ตรวจพบ URL ชั่วคราว (echo) ใน localStorage จึงรีเซ็ตกลับเป็นค่าเริ่มต้น');
+      localStorage.removeItem(WEBHOOK_STORAGE_KEY);
+      return DEFAULT_APPS_SCRIPT_URL;
+    }
+    return trimmed;
+  }
   return DEFAULT_APPS_SCRIPT_URL;
 }
 
 export function setAppsScriptUrl(url: string): void {
-  localStorage.setItem(WEBHOOK_STORAGE_KEY, url.trim());
+  const trimmed = url.trim();
+  if (trimmed.includes('script.googleusercontent.com')) {
+    throw new Error('ไม่สามารถใช้ URL จาก script.googleusercontent.com ได้ กรุณาใช้ Web App URL ที่ลงท้ายด้วย /exec จาก Google Apps Script');
+  }
+  localStorage.setItem(WEBHOOK_STORAGE_KEY, trimmed);
 }
 
 export function generateCaseId(): string {
@@ -101,22 +114,42 @@ export async function saveToGoogleSheet(
   }
 
   try {
-    // Google Apps Script redirect creates CORS issue with standard fetch in browsers.
-    // Using mode: 'no-cors' with text/plain guarantees the POST payload reaches Apps Script and saves without browser error.
-    await fetch(scriptUrl, {
+    // การส่งข้อมูลไปยัง Google Apps Script Web App ด้วย text/plain จะไม่เกิด CORS preflight (OPTIONS)
+    // ทำให้เบราว์เซอร์ส่งตรงและติดตาม redirect (302) ไปรับผลลัพธ์ JSON จาก Google ได้อย่างถูกต้อง
+    const response = await fetch(scriptUrl, {
       method: 'POST',
-      mode: 'no-cors',
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
       },
       body: JSON.stringify(payload),
     });
 
-    return {
-      success: true,
-      message: 'บันทึกข้อมูลลง Google Sheet เรียบร้อยแล้ว',
-      caseId: payload.caseId,
-    };
+    if (!response.ok && response.status !== 0) {
+      throw new Error(`Google Apps Script ส่งกลับรหัสข้อผิดพลาด HTTP ${response.status}`);
+    }
+
+    const text = await response.text();
+    let result: any;
+    try {
+      result = JSON.parse(text);
+    } catch {
+      // ในกรณีที่เบราว์เซอร์รับเป็นข้อความทั่วไป
+      if (text.includes('success')) {
+        result = { status: 'success', message: 'บันทึกข้อมูลเรียบร้อยแล้ว' };
+      } else {
+        throw new Error(`คำตอบจากเซิร์ฟเวอร์ไม่ใช่รูปแบบ JSON: ${text.slice(0, 100)}`);
+      }
+    }
+
+    if (result.status === 'success') {
+      return {
+        success: true,
+        message: result.message || 'บันทึกข้อมูลลง Google Sheet เรียบร้อยแล้ว',
+        caseId: result.caseId || payload.caseId,
+      };
+    } else {
+      throw new Error(result.message || 'บันทึกข้อมูลไม่สำเร็จ (เซิร์ฟเวอร์ส่งข้อผิดพลาดกลับมา)');
+    }
   } catch (err: any) {
     throw new Error(err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ Google Sheet');
   }

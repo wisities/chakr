@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   X,
   Database,
-  ExternalLink,
   Search,
   CheckCircle2,
   RefreshCw,
@@ -12,7 +11,6 @@ import {
 import {
   getAppsScriptUrl,
   setAppsScriptUrl,
-  GOOGLE_SHEET_URL,
   fetchCaseFromGoogleSheet,
   listRecentFromGoogleSheet,
 } from '../utils/googleSheets';
@@ -65,11 +63,15 @@ export const GoogleSheetSyncModal: React.FC<GoogleSheetSyncModalProps> = ({
   };
 
   const handleSaveUrl = () => {
-    setAppsScriptUrl(scriptUrl);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 2500);
-    if (scriptUrl) {
-      loadRecent();
+    try {
+      setAppsScriptUrl(scriptUrl);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2500);
+      if (scriptUrl) {
+        loadRecent();
+      }
+    } catch (err: any) {
+      alert(err.message || 'รูปแบบ URL ไม่ถูกต้อง');
     }
   };
 
@@ -201,25 +203,9 @@ export const GoogleSheetSyncModal: React.FC<GoogleSheetSyncModalProps> = ({
             <h2 style={{ fontSize: '1.3rem', fontWeight: 700, margin: 0 }}>
               เชื่อมต่อและค้นหาข้อมูล Google Sheet
             </h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.2rem' }}>
-              <a
-                href={GOOGLE_SHEET_URL}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  fontSize: '0.825rem',
-                  color: 'var(--primary-600)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                  textDecoration: 'none',
-                  fontWeight: 500
-                }}
-              >
-                <span>เปิดดู Google Sheet โครงการ</span>
-                <ExternalLink size={13} />
-              </a>
-            </div>
+            <p style={{ fontSize: '0.825rem', color: 'var(--text-secondary)', margin: '0.2rem 0 0 0' }}>
+              ค้นหาและซิงค์เคสที่เคยคำนวณไว้ในฐานข้อมูลคลาวด์ของโครงการ
+            </p>
           </div>
         </div>
 

@@ -16,6 +16,7 @@ import {
   Hash,
   ArrowRight,
   Ruler,
+  Lock,
 } from 'lucide-react';
 import { determinePipeSize, PIPE_CONSTANTS_MAP } from '../../utils/calculations';
 
@@ -147,18 +148,30 @@ export const Step1Measurements: React.FC<Step1MeasurementsProps> = ({
             />
           </div>
 
-          {/* Staff Name */}
+          {/* Staff Name (Locked by Google Login) */}
           <div className="form-group" style={{ margin: 0 }}>
-            <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 600 }}>
-              <UserCheck size={14} style={{ color: 'var(--primary-600)' }} />
-              <span>Staff ผู้คำนวณ</span>
+            <label className="form-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 600 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <UserCheck size={14} style={{ color: 'var(--primary-600)' }} />
+                <span>Staff ผู้คำนวณ</span>
+              </div>
+              <span className="badge badge-primary" style={{ fontSize: '0.68rem', padding: '0.1rem 0.4rem', display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}>
+                <Lock size={10} /> บัญชี Google
+              </span>
             </label>
             <input
               type="text"
               className="input-field"
-              placeholder="ชื่อช่าง / สัตวแพทย์"
+              placeholder="ชื่อผู้ใช้งานจากบัญชี Google"
               value={measurements.staffName || ''}
-              onChange={(e) => onChangeMeasurements({ staffName: e.target.value })}
+              readOnly
+              title="ชื่อผู้ใช้งานถูกล็อกตามบัญชี Google ที่เข้าสู่ระบบ"
+              style={{
+                fontWeight: 600,
+                background: 'var(--bg-card-hover)',
+                cursor: 'not-allowed',
+                color: 'var(--text-primary)',
+              }}
             />
           </div>
 

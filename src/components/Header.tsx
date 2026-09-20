@@ -9,12 +9,16 @@ import {
   Sparkles,
   CloudUpload,
   RefreshCw,
+  LogOut,
+  User,
 } from 'lucide-react';
-import { GOOGLE_SHEET_URL } from '../utils/googleSheets';
+import { UserProfile } from '../utils/auth';
 
 interface HeaderProps {
   darkMode: boolean;
   isSavingSheet: boolean;
+  userProfile: UserProfile | null;
+  onLogout: () => void;
   onToggleTheme: () => void;
   onOpenSavedCases: () => void;
   onOpenGoogleSheetSync: () => void;
@@ -26,6 +30,8 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   darkMode,
   isSavingSheet,
+  userProfile,
+  onLogout,
   onToggleTheme,
   onOpenSavedCases,
   onOpenGoogleSheetSync,
@@ -165,16 +171,57 @@ export const Header: React.FC<HeaderProps> = ({
             <span>พิมพ์ใบงาน (A4)</span>
           </button>
 
-          <a
-            href={GOOGLE_SHEET_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary"
-            title="เปิด Google Sheet ของโครงการ"
-            style={{ padding: '0.35rem 0.65rem', fontSize: '0.8rem', textDecoration: 'none' }}
-          >
-            📊 ชีตโครงการ
-          </a>
+          {userProfile && (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                background: 'var(--bg-card-hover)',
+                padding: '0.2rem 0.5rem',
+                borderRadius: '8px',
+                border: '1px solid var(--border-color)',
+                fontSize: '0.78rem',
+              }}
+            >
+              {userProfile.picture ? (
+                <img
+                  src={userProfile.picture}
+                  alt={userProfile.name}
+                  style={{ width: '22px', height: '22px', borderRadius: '50%' }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: '22px',
+                    height: '22px',
+                    borderRadius: '50%',
+                    background: 'var(--primary-600)',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.7rem',
+                    fontWeight: 700,
+                  }}
+                >
+                  <User size={12} />
+                </div>
+              )}
+              <span style={{ fontWeight: 600, maxWidth: '110px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={userProfile.name}>
+                {userProfile.name}
+              </span>
+              <button
+                type="button"
+                onClick={onLogout}
+                className="btn btn-secondary"
+                title="ออกจากระบบ Google"
+                style={{ padding: '0.2rem 0.35rem', fontSize: '0.72rem', border: 'none', background: 'transparent' }}
+              >
+                <LogOut size={13} style={{ color: '#ef4444' }} />
+              </button>
+            </div>
+          )}
 
           <button
             onClick={onToggleTheme}

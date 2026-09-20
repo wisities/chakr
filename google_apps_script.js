@@ -90,7 +90,17 @@ function doGet(e) {
 
 function doPost(e) {
   try {
-    const postData = JSON.parse(e.postData.contents);
+    let postData = {};
+    if (e && e.postData && e.postData.contents) {
+      try {
+        postData = JSON.parse(e.postData.contents);
+      } catch (err) {
+        postData = e.parameter || {};
+      }
+    } else if (e && e.parameter) {
+      postData = e.parameter;
+    }
+
     const sheet = getOrCreateSheet();
     const data = sheet.getDataRange().getValues();
 
