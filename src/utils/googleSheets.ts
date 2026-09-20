@@ -9,10 +9,16 @@ import {
 export const GOOGLE_SHEET_URL =
   'https://docs.google.com/spreadsheets/d/1EJASDHMSzbnt2mdlALjvwgmA8HkIiuHQGwlahMr44gg/edit?usp=sharing';
 
+// ค่าเริ่มต้น Web App URL (ถ้ามีการใส่ไว้ ทุกคนจะใช้งานได้ทันทีโดยไม่ต้องตั้งค่าทีละเครื่อง)
+export const DEFAULT_APPS_SCRIPT_URL =
+  (import.meta.env?.VITE_GOOGLE_APPS_SCRIPT_URL as string) || '';
+
 const WEBHOOK_STORAGE_KEY = 'chakr_apps_script_url';
 
 export function getAppsScriptUrl(): string {
-  return localStorage.getItem(WEBHOOK_STORAGE_KEY) || '';
+  const customUrl = localStorage.getItem(WEBHOOK_STORAGE_KEY);
+  if (customUrl && customUrl.trim()) return customUrl.trim();
+  return DEFAULT_APPS_SCRIPT_URL;
 }
 
 export function setAppsScriptUrl(url: string): void {
