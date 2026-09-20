@@ -265,9 +265,9 @@ export const AnimalForm: React.FC<AnimalFormProps> = ({
                 cursor: 'pointer'
               }}
             >
-              <option value="3_hun">3 หุน (3/8") - สุนัขเล็ก / แมว</option>
-              <option value="4_hun">4 หุน (1/2") - สุนัข 6-10 กก.</option>
-              <option value="6_hun">6 หุน (3/4") - สุนัข &gt; 10 กก.</option>
+              <option value="3_hun">3 หุน (3/8") - สุนัขเล็ก 1-6 กก. / แมว</option>
+              <option value="4_hun">4 หุน (1/2") - สุนัข 7-12 กก.</option>
+              <option value="6_hun">6 หุน (3/4") - สุนัข &gt; 12 กก.</option>
             </select>
           </div>
         </div>

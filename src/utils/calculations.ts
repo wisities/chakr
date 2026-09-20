@@ -55,18 +55,18 @@ export const PIPE_CONSTANTS_MAP: Record<PipeSize, PipeConstants> = {
  * กำหนดขนาดท่อตามประเภทสัตว์และน้ำหนัก
  * - แมว: ใช้ 3 หุน เสมอ
  * - สุนัข:
- *    1 - 5 kg  -> 3 หุน
- *    6 - 10 kg -> 4 หุน
- *    > 10 kg   -> 6 หุน
+ *    1 - 6 kg   -> 3 หุน
+ *    7 - 12 kg  -> 4 หุน
+ *    >= 13 kg   -> 6 หุน
  */
 export function determinePipeSize(animalType: AnimalType, weight: number): PipeSize {
   if (animalType === 'cat') {
     return '3_hun';
   }
-  if (weight <= 5) {
+  if (weight <= 6) {
     return '3_hun';
   }
-  if (weight <= 10) {
+  if (weight <= 12) {
     return '4_hun';
   }
   return '6_hun';
@@ -394,33 +394,53 @@ export function calculateFullWheelchair(
 
   const sizeStr = pipeConstants.sizeName;
 
+  const chestCircumference = measurements.H;
+  const supportSpec = chestCircumference
+    ? `พยุงลำตัวและอก (รอบอก H = ${chestCircumference} ซม.)`
+    : 'พยุงลำตัวและอก';
+
   if (wheelchairType === '2_wheel') {
     fittings.push({ name: `ข้องอ 90° PVC (${sizeStr})`, count: 4, spec: 'เกรดหนา 8.5 หรือ 13.5' });
     fittings.push({ name: `ข้อต่อสามทาง 90° PVC (${sizeStr})`, count: 6, spec: 'เกรดหนา' });
 
     hardware.push({
-      name: `ชุดล้อหน้าหรือล้อหลัง ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. (เส้นผ่านศูนย์กลาง ${pipeConstants.rearWheelRadius * 2} ซม.)`,
-      count: 2,
+      name: `ล้อหลังขวา ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. (⌀${pipeConstants.rearWheelRadius * 2} ซม.)`,
+      count: 1,
+      spec: 'ล้อยางตามขนาดท่อ',
+    });
+    hardware.push({
+      name: `ล้อหลังซ้าย ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. (⌀${pipeConstants.rearWheelRadius * 2} ซม.)`,
+      count: 1,
       spec: 'ล้อยางตามขนาดท่อ',
     });
     hardware.push({ name: 'ก้ามปู (คลิปล็อค)', count: 4, spec: 'สำหรับ Lock ซัพพอร์ตหน้า' });
-    hardware.push({ name: 'ชุดซับพอร์ตตามขนาด', count: 1, spec: 'พยุงลำตัวและอก' });
+    hardware.push({ name: 'ชุดซับพอร์ตตามขนาด', count: 1, spec: supportSpec });
   } else {
     // 4 ล้อ
     fittings.push({ name: `ข้องอ 90° PVC (${sizeStr})`, count: 8, spec: 'เกรดหนา 8.5 หรือ 13.5' });
     fittings.push({ name: `ข้อต่อสามทาง 90° PVC (${sizeStr})`, count: 10, spec: 'เกรดหนา' });
 
     hardware.push({
-      name: `ชุดล้อหน้าหรือล้อหลัง ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. (เส้นผ่านศูนย์กลาง ${pipeConstants.rearWheelRadius * 2} ซม.)`,
-      count: 2,
+      name: `ล้อหลังขวา ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. (⌀${pipeConstants.rearWheelRadius * 2} ซม.)`,
+      count: 1,
       spec: 'ล้อยางรับน้ำหนักหลัง',
     });
     hardware.push({
-      name: `ชุดล้อหน้าหรือล้อหลัง ขนาดความสูง ${pipeConstants.frontWheelHeight} ซม.`,
-      count: 2,
+      name: `ล้อหลังซ้าย ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. (⌀${pipeConstants.rearWheelRadius * 2} ซม.)`,
+      count: 1,
+      spec: 'ล้อยางรับน้ำหนักหลัง',
+    });
+    hardware.push({
+      name: `ล้อหน้าขวา ขนาดความสูง ${pipeConstants.frontWheelHeight} ซม.`,
+      count: 1,
       spec: 'ล้อคาสเตอร์/ล้อหมุนรอบทิศทาง',
     });
-    hardware.push({ name: 'ชุดซับพอร์ตตามขนาด', count: 1, spec: 'พยุงลำตัว 4 จุด (หน้า-หลัง-อก-สะโพก)' });
+    hardware.push({
+      name: `ล้อหน้าซ้าย ขนาดความสูง ${pipeConstants.frontWheelHeight} ซม.`,
+      count: 1,
+      spec: 'ล้อคาสเตอร์/ล้อหมุนรอบทิศทาง',
+    });
+    hardware.push({ name: 'ชุดซับพอร์ตตามขนาด', count: 1, spec: supportSpec });
   }
 
   return {

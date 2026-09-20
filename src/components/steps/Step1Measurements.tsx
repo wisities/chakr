@@ -78,6 +78,15 @@ export const Step1Measurements: React.FC<Step1MeasurementsProps> = ({
   if (measurements.D >= avgAB && measurements.D > 0 && avgAB > 0) {
     warnings.push('ค่า D (ความสูงถึงหน้าอก) สูงกว่าระดับกึ่งกลางลำตัว ((A+B)/2) อาจทำให้ชิ้นส่วน จ ติดลบ');
   }
+  // ตรวจสอบ G vs H/π: H (รอบอก) หารด้วย π ควรใกล้เคียงกับ G
+  if (measurements.G > 0 && measurements.H > 0) {
+    const estimatedG = Math.round((measurements.H / Math.PI) * 10) / 10;
+    const diff = Math.abs(measurements.G - estimatedG);
+    const tolerance = Math.max(2, estimatedG * 0.25); // คลาดเคลื่อน 25% หรือ 2 ซม.
+    if (diff > tolerance) {
+      warnings.push(`คำแนะนำ: ค่า G (ความกว้าง ${measurements.G} ซม.) ไม่สอดคล้องกับค่า H/π (รอบอก ${measurements.H} ÷ 3.14 ≈ ${estimatedG} ซม.) กรุณาตรวจสอบการวัดค่า G และ H อีกครั้ง`);
+    }
+  }
 
   const measurementDescriptions: Record<string, { title: string; desc: string; tip: string }> = {
     A: { title: 'A : ความสูงจากพื้นถึงหลังสะโพก', desc: 'วัดจากพื้นในแนวดิ่งขึ้นมาถึงระดับสูงสุดของหลังส่วนสะโพก', tip: 'ใช้กำหนดความสูงเสาข้างล้อหลัง ข' },
@@ -288,9 +297,9 @@ export const Step1Measurements: React.FC<Step1MeasurementsProps> = ({
                   cursor: 'pointer'
                 }}
               >
-                <option value="3_hun">3 หุน (แมว/สุนัขเล็ก 1-5 กก.)</option>
-                <option value="4_hun">4 หุน (สุนัขกลาง 6-10 กก.)</option>
-                <option value="6_hun">6 หุน (สุนัขใหญ่ &gt; 10 กก.)</option>
+                <option value="3_hun">3 หุน (แมว/สุนัขเล็ก 1-6 กก.)</option>
+                <option value="4_hun">4 หุน (สุนัขกลาง 7-12 กก.)</option>
+                <option value="6_hun">6 หุน (สุนัขใหญ่ &gt; 12 กก.)</option>
               </select>
             </div>
           </div>

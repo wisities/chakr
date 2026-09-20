@@ -108,7 +108,7 @@ export const MaterialsSummary: React.FC<MaterialsSummaryProps> = ({ calculationR
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{hw.spec}</div>
                 </div>
                 <span className="badge badge-success" style={{ fontSize: '0.85rem' }}>
-                  {hw.count} {hw.name.includes('ล้อ') ? 'ล้อ' : 'ชุด'}
+                  {hw.count} ชุด
                 </span>
               </li>
             ))}
