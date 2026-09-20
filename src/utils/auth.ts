@@ -8,9 +8,10 @@ export interface UserProfile {
 const USER_STORAGE_KEY = 'chakr_user_profile';
 const CLIENT_ID_STORAGE_KEY = 'chakr_google_client_id';
 
-// Default Client ID from Vite env or fallback
+// Default Client ID ส่วนกลาง (เพื่อให้ทุกคนเข้าใช้งานได้ทันทีโดยไม่ต้องตั้งค่าเอง)
 export const DEFAULT_GOOGLE_CLIENT_ID =
-  (import.meta.env?.VITE_GOOGLE_CLIENT_ID as string) || '';
+  (import.meta.env?.VITE_GOOGLE_CLIENT_ID as string) ||
+  '872425785877-ej47p9bbgsiqvj7su56po69hn8t48f1n.apps.googleusercontent.com';
 
 export function getStoredGoogleClientId(): string {
   const custom = localStorage.getItem(CLIENT_ID_STORAGE_KEY);
