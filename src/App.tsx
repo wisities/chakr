@@ -13,11 +13,11 @@ import {
   saveToGoogleSheet,
 } from './utils/googleSheets';
 import { Header } from './components/Header';
-import { AnimalForm } from './components/AnimalForm';
-import { WheelchairDiagram } from './components/WheelchairDiagram';
-import { CutResultsTable } from './components/CutResultsTable';
-import { MaterialsSummary } from './components/MaterialsSummary';
-import { QCChecklist } from './components/QCChecklist';
+import { StepProgressBar, StepNumber } from './components/StepProgressBar';
+import { Step1Measurements } from './components/steps/Step1Measurements';
+import { Step2CutParts } from './components/steps/Step2CutParts';
+import { Step3Materials } from './components/steps/Step3Materials';
+import { Step4QCAndSave } from './components/steps/Step4QCAndSave';
 import { MeasurementGuideModal } from './components/MeasurementGuideModal';
 import { SavedCasesModal } from './components/SavedCasesModal';
 import { GoogleSheetSyncModal } from './components/GoogleSheetSyncModal';
@@ -41,6 +41,8 @@ const INITIAL_MEASUREMENTS: AnimalMeasurements = {
 };
 
 export function App() {
+  const [currentStep, setCurrentStep] = useState<StepNumber>(1);
+
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     return localStorage.getItem('chakr_theme') === 'dark';
   });
@@ -125,6 +127,7 @@ export function App() {
       setIsManualPipeSize(false);
       setQcMeasuredValues({});
       setSelectedPartKey(null);
+      setCurrentStep(1);
       showToast('รีเซ็ตข้อมูลเรียบร้อย (สร้าง Case ID ใหม่)');
     }
   };
@@ -205,6 +208,7 @@ export function App() {
       setIsManualPipeSize(false);
     }
     setQcMeasuredValues({});
+    setCurrentStep(1);
     showToast('โหลดสัดส่วนตัวอย่างเรียบร้อย');
   };
 
@@ -227,7 +231,6 @@ export function App() {
       const res = await saveToGoogleSheet(payload);
       showToast(`✅ ${res.message} (Case ID: ${res.caseId})`);
       
-      // Also save to local storage as synced
       const localCase: SavedCase = {
         id: res.caseId,
         createdAt: new Date().toISOString(),
@@ -240,7 +243,6 @@ export function App() {
       };
       setSavedCases((prev) => [localCase, ...prev.filter((c) => c.id !== res.caseId)]);
     } catch (err: any) {
-      // If Web App URL is not set yet, open the modal automatically
       if (err.message && err.message.includes('Web App URL')) {
         setIsGoogleSheetSyncOpen(true);
       } else {
@@ -260,7 +262,8 @@ export function App() {
     setWheelchairType(record.wheelchairType);
     setPipeSize(record.pipeSize);
     setIsManualPipeSize(true);
-    showToast(`โหลดเคส "${record.measurements.caseId}" จาก Google Sheet เรียบร้อยแล้ว (สามารถแก้ไขและกดบันทึกใหม่ได้)`);
+    setCurrentStep(1);
+    showToast(`โหลดเคส "${record.measurements.caseId}" จาก Google Sheet เรียบร้อยแล้ว`);
   };
 
   const handleSaveCurrentCase = () => {
@@ -288,6 +291,7 @@ export function App() {
     } else {
       setQcMeasuredValues({});
     }
+    setCurrentStep(1);
     showToast(`โหลดข้อมูลเคส "${c.measurements.petName || c.measurements.caseId}" สำเร็จ`);
   };
 
@@ -327,7 +331,6 @@ export function App() {
         darkMode={darkMode}
         isSavingSheet={isSavingSheet}
         onToggleTheme={() => setDarkMode(!darkMode)}
-        onOpenGuide={() => setIsGuideOpen(true)}
         onOpenSavedCases={() => setIsSavedCasesOpen(true)}
         onOpenGoogleSheetSync={() => setIsGoogleSheetSyncOpen(true)}
         onSaveToGoogleSheet={handleSaveToGoogleSheet}
@@ -335,8 +338,8 @@ export function App() {
         onLoadPreset={handleLoadPreset}
       />
 
-      {/* Main App Container */}
-      <main className="container no-print" style={{ flex: 1, padding: '1.5rem 1rem' }}>
+      {/* Main Container */}
+      <main className="container no-print" style={{ flex: 1, padding: '1.25rem 1rem' }}>
         
         {/* Toast Notification */}
         {toastMessage && (
@@ -364,52 +367,62 @@ export function App() {
           </div>
         )}
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12" style={{ gap: '1.25rem' }}>
-          
-          {/* Left Column (Inputs Form) */}
-          <div className="md:col-span-5" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <AnimalForm
-              measurements={measurements}
-              wheelchairType={wheelchairType}
-              pipeSize={pipeSize}
-              isManualPipeSize={isManualPipeSize}
-              isSavingSheet={isSavingSheet}
-              onChangeMeasurements={handleUpdateMeasurements}
-              onChangeWheelchairType={setWheelchairType}
-              onChangePipeSize={handleChangePipeSize}
-              onReset={handleReset}
-              onOpenGuide={() => setIsGuideOpen(true)}
-              onSaveToGoogleSheet={handleSaveToGoogleSheet}
-            />
+        {/* Step Progress Bar (1 -> 2 -> 3 -> 4) */}
+        <StepProgressBar
+          currentStep={currentStep}
+          onSelectStep={setCurrentStep}
+        />
 
-            <MaterialsSummary calculationResult={calculationResult} />
-          </div>
+        {/* Step Views */}
+        {currentStep === 1 && (
+          <Step1Measurements
+            measurements={measurements}
+            wheelchairType={wheelchairType}
+            pipeSize={pipeSize}
+            isManualPipeSize={isManualPipeSize}
+            onChangeMeasurements={handleUpdateMeasurements}
+            onChangeWheelchairType={setWheelchairType}
+            onChangePipeSize={handleChangePipeSize}
+            onReset={handleReset}
+            onOpenGuide={() => setIsGuideOpen(true)}
+            onNextStep={() => setCurrentStep(2)}
+          />
+        )}
 
-          {/* Right Column (Diagram, Cutting Table & QC) */}
-          <div className="md:col-span-7" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <WheelchairDiagram
-              calculationResult={calculationResult}
-              selectedPartKey={selectedPartKey}
-              onSelectPart={setSelectedPartKey}
-            />
+        {currentStep === 2 && (
+          <Step2CutParts
+            calculationResult={calculationResult}
+            selectedPartKey={selectedPartKey}
+            onSelectPart={setSelectedPartKey}
+            onPrevStep={() => setCurrentStep(1)}
+            onNextStep={() => setCurrentStep(3)}
+          />
+        )}
 
-            <CutResultsTable
-              calculationResult={calculationResult}
-              selectedPartKey={selectedPartKey}
-              onSelectPart={setSelectedPartKey}
-            />
+        {currentStep === 3 && (
+          <Step3Materials
+            calculationResult={calculationResult}
+            onPrevStep={() => setCurrentStep(2)}
+            onNextStep={() => setCurrentStep(4)}
+          />
+        )}
 
-            <QCChecklist
-              measurements={measurements}
-              wheelchairType={wheelchairType}
-              pipeSize={pipeSize}
-              qcMeasuredValues={qcMeasuredValues}
-              onUpdateQCValue={handleUpdateQCValue}
-            />
-          </div>
-
-        </div>
+        {currentStep === 4 && (
+          <Step4QCAndSave
+            measurements={measurements}
+            wheelchairType={wheelchairType}
+            pipeSize={pipeSize}
+            calculationResult={calculationResult}
+            qcMeasuredValues={qcMeasuredValues}
+            isSavingSheet={isSavingSheet}
+            onUpdateQCValue={handleUpdateQCValue}
+            onSaveToGoogleSheet={handleSaveToGoogleSheet}
+            onSaveLocalCase={handleSaveCurrentCase}
+            onPrint={handlePrint}
+            onResetNewCase={handleReset}
+            onPrevStep={() => setCurrentStep(3)}
+          />
+        )}
 
       </main>
 
@@ -450,23 +463,22 @@ export function App() {
         style={{
           borderTop: '1px solid var(--border-color)',
           background: 'var(--bg-card)',
-          padding: '1.25rem 0',
+          padding: '1rem 0',
           marginTop: '2rem',
-          fontSize: '0.85rem',
+          fontSize: '0.825rem',
           color: 'var(--text-secondary)',
           textAlign: 'center',
         }}
       >
-        <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
+        <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 600, color: 'var(--text-primary)' }}>
             <span>โครงการเพราะมีน้ำใจจึงมีชีวิต (Wheelchair for Pets)</span>
             <span>•</span>
             <span>มูลนิธิศาสตราจารย์ ดร.จักร พิชัยรณรงค์สงคราม</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            <span>ระบบคำนวณและควบคุมคุณภาพการตัดประกอบวีลแชร์ PVC พร้อมเชื่อมต่อ Google Sheet</span>
-            <Heart size={14} style={{ color: '#ef4444' }} />
-            <span>GitHub &amp; Vercel Ready</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.775rem', color: 'var(--text-muted)' }}>
+            <span>ระบบคำนวณและควบคุมคุณภาพการตัดประกอบวีลแชร์ PVC สัตว์พิการ</span>
+            <Heart size={13} style={{ color: '#ef4444' }} />
           </div>
         </div>
       </footer>
