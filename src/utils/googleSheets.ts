@@ -9,9 +9,10 @@ import {
 export const GOOGLE_SHEET_URL =
   'https://docs.google.com/spreadsheets/d/1EJASDHMSzbnt2mdlALjvwgmA8HkIiuHQGwlahMr44gg/edit?usp=sharing';
 
-// ค่าเริ่มต้น Web App URL (ถ้ามีการใส่ไว้ ทุกคนจะใช้งานได้ทันทีโดยไม่ต้องตั้งค่าทีละเครื่อง)
+// ค่าเริ่มต้น Web App URL ส่วนกลาง (ทุกคนเข้าเว็บมาใช้งานได้ทันที 100%)
 export const DEFAULT_APPS_SCRIPT_URL =
-  (import.meta.env?.VITE_GOOGLE_APPS_SCRIPT_URL as string) || '';
+  (import.meta.env?.VITE_GOOGLE_APPS_SCRIPT_URL as string) ||
+  'https://script.google.com/macros/s/AKfycbxm9QKwmZ2R8aJ5aR560Yr0XY5ht-2GuCKyJe0jxSoemM2v0slj5kXnszGX30K7r1Z9/exec';
 
 const WEBHOOK_STORAGE_KEY = 'chakr_apps_script_url';
 
