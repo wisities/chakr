@@ -45,7 +45,7 @@ export const MaterialsSummary: React.FC<MaterialsSummaryProps> = ({ calculationR
               borderBottom: '1px solid var(--border-color)'
             }}>
               <div>
-                <strong style={{ color: 'var(--primary-700)' }}>ท่อ PVC สีฟ้า ขนาด {pipeConstants.sizeName}</strong>
+                <strong style={{ color: 'var(--primary-700)' }}>ท่อ PVC สีขาว ขนาด {pipeConstants.sizeName}</strong>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                   ความยาวที่ใช้จริง {totalLengthMeters} ม. (ท่อยาว 4 ม. / เส้น)
                 </div>

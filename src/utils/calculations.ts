@@ -396,36 +396,31 @@ export function calculateFullWheelchair(
 
   if (wheelchairType === '2_wheel') {
     fittings.push({ name: `ข้องอ 90° PVC (${sizeStr})`, count: 4, spec: 'เกรดหนา 8.5 หรือ 13.5' });
-    fittings.push({ name: `ข้อต่อสามทาง 90° PVC (${sizeStr})`, count: 8, spec: 'เกรดหนา' });
-    fittings.push({ name: `ฝาครอบท่อ PVC (${sizeStr})`, count: 4, spec: 'ปิดหัวท้ายคาน' });
+    fittings.push({ name: `ข้อต่อสามทาง 90° PVC (${sizeStr})`, count: 6, spec: 'เกรดหนา' });
 
     hardware.push({
-      name: `ล้อหลังยางตัน/โฟม (ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. / เส้นผ่านศูนย์กลาง ${pipeConstants.rearWheelRadius * 2} ซม.)`,
+      name: `ชุดล้อหน้าหรือล้อหลัง ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. (เส้นผ่านศูนย์กลาง ${pipeConstants.rearWheelRadius * 2} ซม.)`,
       count: 2,
-      spec: 'ลูกปืนแบริ่งแกนกลาง',
+      spec: 'ล้อยางตามขนาดท่อ',
     });
-    hardware.push({ name: 'น็อตเพลาล้อสแตนเลส (แกนยาว)', count: 2, spec: 'พร้อมแหวนอีแปะและน็อตกันคลาย' });
-    hardware.push({ name: 'สายรัดพยุงลำตัว & อก (Harness Straps)', count: 1, spec: 'ผ้าตาข่ายระบายอากาศ + ตัวล็อคก้ามปู' });
-    hardware.push({ name: 'แผ่นโฟมยางรองขอบท่อ', count: 1, spec: 'กันการเสียดสีผิวหนังสัตว์' });
+    hardware.push({ name: 'ก้ามปู (คลิปล็อค)', count: 4, spec: 'สำหรับ Lock ซัพพอร์ตหน้า' });
+    hardware.push({ name: 'ชุดซับพอร์ตตามขนาด', count: 1, spec: 'พยุงลำตัวและอก' });
   } else {
     // 4 ล้อ
     fittings.push({ name: `ข้องอ 90° PVC (${sizeStr})`, count: 8, spec: 'เกรดหนา 8.5 หรือ 13.5' });
-    fittings.push({ name: `ข้อต่อสามทาง 90° PVC (${sizeStr})`, count: 12, spec: 'เกรดหนา' });
-    fittings.push({ name: `ฝาครอบท่อ PVC (${sizeStr})`, count: 4, spec: 'ปิดปลายคาน' });
+    fittings.push({ name: `ข้อต่อสามทาง 90° PVC (${sizeStr})`, count: 10, spec: 'เกรดหนา' });
 
     hardware.push({
-      name: `ล้อหลัง (ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. / เส้นผ่านศูนย์กลาง ${pipeConstants.rearWheelRadius * 2} ซม.)`,
+      name: `ชุดล้อหน้าหรือล้อหลัง ขนาดรัศมี ${pipeConstants.rearWheelRadius} ซม. (เส้นผ่านศูนย์กลาง ${pipeConstants.rearWheelRadius * 2} ซม.)`,
       count: 2,
       spec: 'ล้อยางรับน้ำหนักหลัง',
     });
     hardware.push({
-      name: `ล้อหน้าหมุนอิสระ 360° (ความสูงชุดล้อ ${pipeConstants.frontWheelHeight} ซม.)`,
+      name: `ชุดล้อหน้าหรือล้อหลัง ขนาดความสูง ${pipeConstants.frontWheelHeight} ซม.`,
       count: 2,
       spec: 'ล้อคาสเตอร์/ล้อหมุนรอบทิศทาง',
     });
-    hardware.push({ name: 'ชุดน็อตและแกนยึดล้อสแตนเลส', count: 4, spec: 'พร้อมแหวนและน็อตกันคลาย' });
-    hardware.push({ name: 'ชุดสายรัดพยุงลำตัว 4 จุด (หน้า-หลัง-อก-สะโพก)', count: 1, spec: 'ปรับระดับได้' });
-    hardware.push({ name: 'แผ่นโฟมยางกันเสียดสี', count: 2, spec: 'บุคานขวางและคานข้าง' });
+    hardware.push({ name: 'ชุดซับพอร์ตตามขนาด', count: 1, spec: 'พยุงลำตัว 4 จุด (หน้า-หลัง-อก-สะโพก)' });
   }
 
   return {

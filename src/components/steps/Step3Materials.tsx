@@ -43,7 +43,7 @@ export const Step3Materials: React.FC<Step3MaterialsProps> = ({
           <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#047857', margin: '0.25rem 0' }}>
             {standardPipesNeeded} เส้น
           </div>
-          <div style={{ fontSize: '0.75rem', color: '#065f46' }}>ซื้อท่อ PVC ฟ้าชั้นความหนา 8.5 หรือ 13.5</div>
+          <div style={{ fontSize: '0.75rem', color: '#065f46' }}>ซื้อท่อ PVC ขาวชั้นความหนา 8.5 หรือ 13.5</div>
         </div>
 
       </div>
