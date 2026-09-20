@@ -77,16 +77,16 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
           style={{
             background: '#0284c7',
             color: '#ffffff',
-            padding: '5px 10px',
+            padding: '6px 12px',
             borderRadius: '4px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '5px',
+            marginBottom: '6px',
           }}
         >
           <div>
-            <div style={{ fontSize: '11pt', fontWeight: 800, letterSpacing: '-0.01em' }}>
+            <div style={{ fontSize: '11.5pt', fontWeight: 800, letterSpacing: '-0.01em' }}>
               ใบงานตัดท่อ PVC & ตรวจรับงาน (QC) วีลแชร์สัตว์พิการ
             </div>
             <div style={{ fontSize: '7.5pt', opacity: 0.95 }}>
@@ -100,68 +100,103 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
         </div>
 
         {/* ========================================================= */}
-        {/* 2. CASE INFO & MEASUREMENTS ROW                           */}
+        {/* 2. CASE INFO & MEASUREMENTS CELLS (EXPANDED GRID BOXES)  */}
         {/* ========================================================= */}
         <div
           style={{
-            border: '1px solid #0284c7',
+            border: '1.5px solid #0284c7',
             borderRadius: '4px',
-            padding: '4px 8px',
-            marginBottom: '5px',
-            background: '#f8fafc',
-            fontSize: '7.5pt',
+            marginBottom: '7px',
+            background: '#ffffff',
+            overflow: 'hidden',
           }}
         >
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.2fr 1.2fr 1.4fr', gap: '2px 8px' }}>
-            <div>
-              <strong>ผู้คำนวณ (Staff):</strong> {measurements.staffName || '-'}
+          {/* General Case Info Grid */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1.2fr 1.3fr 1.3fr 1.2fr',
+              background: '#f8fafc',
+              borderBottom: '1px solid #cbd5e1',
+              fontSize: '7.5pt',
+            }}
+          >
+            <div style={{ padding: '4px 8px', borderRight: '1px solid #e2e8f0' }}>
+              <div style={{ color: '#64748b', fontSize: '6.8pt', fontWeight: 600 }}>ผู้คำนวณ (Staff)</div>
+              <div style={{ fontWeight: 700, color: '#0f172a', marginTop: '1px' }}>
+                {measurements.staffName || '-'}
+              </div>
             </div>
-            <div>
-              <strong>ชื่อสัตว์:</strong> {measurements.petName || '-'} ({measurements.animalType === 'dog' ? 'สุนัข' : 'แมว'} {measurements.weight || 0} กก.)
+            <div style={{ padding: '4px 8px', borderRight: '1px solid #e2e8f0' }}>
+              <div style={{ color: '#64748b', fontSize: '6.8pt', fontWeight: 600 }}>ชื่อสัตว์ / ชนิด / น้ำหนัก</div>
+              <div style={{ fontWeight: 700, color: '#0f172a', marginTop: '1px' }}>
+                {measurements.petName || '-'} ({measurements.animalType === 'dog' ? 'สุนัข' : 'แมว'} {measurements.weight || 0} กก.)
+              </div>
             </div>
-            <div>
-              <strong>เจ้าของ:</strong> {measurements.ownerName || '-'}
+            <div style={{ padding: '4px 8px', borderRight: '1px solid #e2e8f0' }}>
+              <div style={{ color: '#64748b', fontSize: '6.8pt', fontWeight: 600 }}>ชื่อเจ้าของ / เบอร์โทร</div>
+              <div style={{ fontWeight: 700, color: '#0f172a', marginTop: '1px' }}>
+                {measurements.ownerName || '-'}
+              </div>
             </div>
-            <div>
-              <strong>โมเดล:</strong>{' '}
-              <span style={{ color: '#0369a1', fontWeight: 700 }}>
-                {wheelchairType === '2_wheel' ? '2 ล้อหลัง' : '4 ล้อ'} (ท่อ {pipeConstants.sizeName})
-              </span>
+            <div style={{ padding: '4px 8px' }}>
+              <div style={{ color: '#64748b', fontSize: '6.8pt', fontWeight: 600 }}>โมเดลวีลแชร์ / ท่อ PVC</div>
+              <div style={{ fontWeight: 700, color: '#0284c7', marginTop: '1px' }}>
+                {wheelchairType === '2_wheel' ? '2 ล้อหลัง' : '4 ล้อ'} ({pipeConstants.sizeName})
+              </div>
             </div>
           </div>
 
-          <div
-            style={{
-              borderTop: '1px dashed #cbd5e1',
-              marginTop: '3px',
-              paddingTop: '2px',
-              display: 'flex',
-              gap: '8px',
-              flexWrap: 'wrap',
-              fontWeight: 600,
-              color: '#0f172a',
-            }}
-          >
-            <span style={{ color: '#0369a1' }}>สัดส่วนวัดตัว (ซม.):</span>
-            <span>A (สูงสะโพก) = <strong style={{ color: '#0284c7' }}>{measurements.A}</strong></span>
-            <span>B (สูงท้อง) = <strong style={{ color: '#0369a1' }}>{measurements.B}</strong></span>
-            <span>G (กว้างตัว) = <strong style={{ color: '#0d9488' }}>{measurements.G}</strong></span>
-            <span>H (รอบอก) = <strong style={{ color: '#8b5cf6' }}>{measurements.H}</strong></span>
-            <span>E (ยาวลำตัว) = <strong style={{ color: '#ea580c' }}>{measurements.E}</strong></span>
-            <span>D (สูงอก) = <strong style={{ color: '#e11d48' }}>{measurements.D}</strong></span>
+          {/* Measurements 6 Grid Cells */}
+          <div style={{ padding: '5px 8px', background: '#ffffff' }}>
+            <div style={{ fontSize: '7pt', fontWeight: 700, color: '#0369a1', marginBottom: '3px' }}>
+              สัดส่วนวัดตัวสัตว์เลี้ยง (Body Measurements - ซม.):
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(6, 1fr)',
+                gap: '5px',
+                textAlign: 'center',
+              }}
+            >
+              {[
+                { label: 'A (สูงสะโพก)', val: measurements.A, color: '#0284c7', bg: '#f0f9ff' },
+                { label: 'B (สูงท้อง)', val: measurements.B, color: '#0369a1', bg: '#f0f9ff' },
+                { label: 'G (กว้างตัว)', val: measurements.G, color: '#0d9488', bg: '#f0fdfa' },
+                { label: 'H (รอบอก)', val: measurements.H, color: '#7c3aed', bg: '#f5f3ff' },
+                { label: 'E (ยาวลำตัว)', val: measurements.E, color: '#ea580c', bg: '#fff7ed' },
+                { label: 'D (สูงอก)', val: measurements.D, color: '#e11d48', bg: '#fff1f2' },
+              ].map((m, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    border: `1px solid ${m.color}40`,
+                    borderRadius: '4px',
+                    background: m.bg,
+                    padding: '3px 2px',
+                  }}
+                >
+                  <div style={{ fontSize: '6.5pt', fontWeight: 600, color: '#475569' }}>{m.label}</div>
+                  <div style={{ fontSize: '9.5pt', fontWeight: 800, color: m.color, marginTop: '1px' }}>
+                    {m.val || 0} <span style={{ fontSize: '6.5pt', fontWeight: 500, color: '#64748b' }}>ซม.</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* ========================================================= */}
         {/* 3. CUTTING PARTS TABLE (ชิ้น ก - ช)                      */}
         {/* ========================================================= */}
-        <div style={{ marginBottom: '5px' }}>
+        <div style={{ marginBottom: '6px' }}>
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '2px',
+              marginBottom: '3px',
               fontSize: '8pt',
               fontWeight: 700,
               color: '#0f172a',
@@ -169,7 +204,7 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
           >
             <span>1. รายการตัดท่อ PVC ขาว (เกรดหนา 8.5/13.5)</span>
             <span style={{ color: '#0369a1', fontSize: '7.5pt' }}>
-              ความยาวรวม: {totalLengthCm} ซม. ({totalLengthMeters} ม.) • ใช้ท่อ 4 ม. = <strong>{standardPipesNeeded} เส้น</strong>
+              ความยาวรวม: <strong>{totalLengthCm} ซม.</strong> ({totalLengthMeters} ม.) • ใช้ท่อมาตรฐาน 4 ม. = <strong>{standardPipesNeeded} เส้น</strong>
             </span>
           </div>
 
@@ -177,43 +212,43 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
             style={{
               width: '100%',
               borderCollapse: 'collapse',
-              fontSize: '7.2pt',
+              fontSize: '7.5pt',
               textAlign: 'left',
               border: '1px solid #cbd5e1',
             }}
           >
             <thead>
               <tr style={{ background: '#e0f2fe', color: '#0369a1', borderBottom: '1px solid #0284c7' }}>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center', width: '32px' }}>ชิ้น</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px' }}>ตำแหน่งและหน้าที่</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'right', width: '70px' }}>ความยาว (ซม.)</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center', width: '45px' }}>จำนวน</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'right', width: '65px' }}>รวม (ซม.)</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px' }}>สูตรการคำนวณ</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center', width: '40px' }}>ตัดแล้ว</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'center', width: '32px' }}>ชิ้น</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 5px' }}>ตำแหน่งและหน้าที่</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'right', width: '70px' }}>ความยาว (ซม.)</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'center', width: '45px' }}>จำนวน</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'right', width: '65px' }}>รวม (ซม.)</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 5px' }}>สูตรการคำนวณ</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'center', width: '42px' }}>ตัดแล้ว</th>
               </tr>
             </thead>
             <tbody>
               {parts.map((p, idx) => (
                 <tr key={p.key} style={{ background: idx % 2 === 0 ? '#ffffff' : '#f8fafc' }}>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center', fontWeight: 800, color: '#0284c7' }}>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'center', fontWeight: 800, color: '#0284c7' }}>
                     {p.key}
                   </td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px' }}>{p.name}</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'right', fontWeight: 700 }}>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '3px 5px', fontWeight: 500 }}>{p.name}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'right', fontWeight: 700 }}>
                     {p.lengthCm}
                   </td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center', fontWeight: 600 }}>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'center', fontWeight: 600 }}>
                     {p.count}
                   </td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'right' }}>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'right' }}>
                     {(p.lengthCm * p.count).toFixed(1)}
                   </td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', color: '#475569', fontSize: '6.8pt' }}>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '3px 5px', color: '#475569', fontSize: '7pt' }}>
                     {p.formulaStr}
                   </td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center' }}>
-                    <div style={{ width: '10px', height: '10px', border: '1px solid #475569', margin: '0 auto' }}></div>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '3px 5px', textAlign: 'center' }}>
+                    <div style={{ width: '11px', height: '11px', border: '1px solid #475569', margin: '0 auto', borderRadius: '1px' }}></div>
                   </td>
                 </tr>
               ))}
@@ -222,15 +257,15 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
         </div>
 
         {/* ========================================================= */}
-        {/* 4. MATERIALS & HARDWARE SUMMARY (COMPACT 2-COL BOX)       */}
+        {/* 4. MATERIALS & HARDWARE SUMMARY (2-COLUMN MINI-TABLES)    */}
         {/* ========================================================= */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: '6px',
-            marginBottom: '5px',
-            fontSize: '7.2pt',
+            gap: '8px',
+            marginBottom: '6px',
+            fontSize: '7.5pt',
           }}
         >
           {/* Left: PVC Fittings */}
@@ -238,21 +273,48 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
             style={{
               border: '1px solid #cbd5e1',
               borderRadius: '4px',
-              padding: '3px 6px',
-              background: '#f8fafc',
+              overflow: 'hidden',
             }}
           >
-            <div style={{ fontWeight: 700, color: '#0284c7', borderBottom: '1px solid #e2e8f0', paddingBottom: '1px', marginBottom: '2px' }}>
+            <div
+              style={{
+                fontWeight: 700,
+                color: '#0284c7',
+                background: '#f0f9ff',
+                padding: '3px 6px',
+                borderBottom: '1px solid #cbd5e1',
+                fontSize: '7.5pt',
+              }}
+            >
               ข้อต่อ PVC ({pipeConstants.sizeName})
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px 6px' }}>
-              {fittings.map((f, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>• {f.name}:</span>
-                  <strong>{f.count} ตัว</strong>
-                </div>
-              ))}
-            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '7.2pt' }}>
+              <tbody>
+                {fittings.map((f, i) => (
+                  <tr
+                    key={i}
+                    style={{
+                      borderBottom: i < fittings.length - 1 ? '1px solid #f1f5f9' : 'none',
+                      background: i % 2 === 0 ? '#ffffff' : '#fafafa',
+                    }}
+                  >
+                    <td style={{ padding: '3px 6px', color: '#1e293b' }}>• {f.name}</td>
+                    <td
+                      style={{
+                        padding: '3px 6px',
+                        textAlign: 'right',
+                        fontWeight: 700,
+                        width: '50px',
+                        whiteSpace: 'nowrap',
+                        color: '#0284c7',
+                      }}
+                    >
+                      {f.count} ตัว
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           {/* Right: Wheels & Harness */}
@@ -260,36 +322,61 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
             style={{
               border: '1px solid #cbd5e1',
               borderRadius: '4px',
-              padding: '3px 6px',
-              background: '#f8fafc',
+              overflow: 'hidden',
             }}
           >
-            <div style={{ fontWeight: 700, color: '#0284c7', borderBottom: '1px solid #e2e8f0', paddingBottom: '1px', marginBottom: '2px' }}>
-              ล้อและชุดสายรัดพยุงตัว
+            <div
+              style={{
+                fontWeight: 700,
+                color: '#0284c7',
+                background: '#f0f9ff',
+                padding: '3px 6px',
+                borderBottom: '1px solid #cbd5e1',
+                fontSize: '7.5pt',
+              }}
+            >
+              ชุดล้อและสายรัดพยุงตัว
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px 6px' }}>
-              {hardware.map((h, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>• {h.name}:</span>
-                  <strong>
-                    {h.count} {h.name.includes('ล้อ') ? 'ล้อ' : 'ชุด'}
-                  </strong>
-                </div>
-              ))}
-            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '7.2pt' }}>
+              <tbody>
+                {hardware.map((h, i) => (
+                  <tr
+                    key={i}
+                    style={{
+                      borderBottom: i < hardware.length - 1 ? '1px solid #f1f5f9' : 'none',
+                      background: i % 2 === 0 ? '#ffffff' : '#fafafa',
+                    }}
+                  >
+                    <td style={{ padding: '3px 6px', color: '#1e293b' }}>• {h.name}</td>
+                    <td
+                      style={{
+                        padding: '3px 6px',
+                        textAlign: 'right',
+                        fontWeight: 700,
+                        width: '55px',
+                        whiteSpace: 'nowrap',
+                        color: '#0284c7',
+                      }}
+                    >
+                      {h.count} {h.name.includes('ล้อ') ? 'ล้อ' : 'ชุด'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
         {/* ========================================================= */}
         {/* 5. QC INSPECTION CHECKLIST TABLE                          */}
         {/* ========================================================= */}
-        <div style={{ marginBottom: '5px' }}>
+        <div style={{ marginBottom: '6px' }}>
           <div
             style={{
               fontSize: '8pt',
               fontWeight: 700,
               color: '#0f172a',
-              marginBottom: '2px',
+              marginBottom: '3px',
               display: 'flex',
               justifyContent: 'space-between',
             }}
@@ -302,17 +389,17 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
             style={{
               width: '100%',
               borderCollapse: 'collapse',
-              fontSize: '7.2pt',
+              fontSize: '7.5pt',
               textAlign: 'left',
               border: '1px solid #cbd5e1',
             }}
           >
             <thead>
               <tr style={{ background: '#f1f5f9', color: '#334155', borderBottom: '1px solid #94a3b8' }}>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px' }}>รายการตรวจสอบ</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px', width: '85px', textAlign: 'center' }}>เป้าหมาย</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px', width: '80px', textAlign: 'center' }}>วัดได้จริง</th>
-                <th style={{ border: '1px solid #cbd5e1', padding: '2px 4px', width: '90px', textAlign: 'center' }}>ผลการตรวจ</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 6px' }}>รายการตรวจสอบ</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 6px', width: '85px', textAlign: 'center' }}>เป้าหมาย</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 6px', width: '80px', textAlign: 'center' }}>วัดได้จริง</th>
+                <th style={{ border: '1px solid #cbd5e1', padding: '3px 6px', width: '95px', textAlign: 'center' }}>ผลการตรวจ</th>
               </tr>
             </thead>
             <tbody>
@@ -320,22 +407,48 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
                 const val = qcMeasuredValues[q.id];
                 return (
                   <tr key={q.id}>
-                    <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px' }}>
-                      <strong>{q.title}</strong>{' '}
+                    <td style={{ border: '1px solid #cbd5e1', padding: '4px 6px' }}>
+                      <strong style={{ color: '#0f172a' }}>{q.title}</strong>{' '}
                       <span style={{ color: '#64748b', fontSize: '6.8pt' }}>({q.description})</span>
                     </td>
-                    <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center', fontWeight: 700 }}>
+                    <td
+                      style={{
+                        border: '1px solid #cbd5e1',
+                        padding: '4px 6px',
+                        textAlign: 'center',
+                        fontWeight: 700,
+                        color: '#0284c7',
+                      }}
+                    >
                       {q.id === 'qc_wheel_alignment' ? 'ระนาบเสมอ' : `${q.targetValue} ซม.`}
                     </td>
-                    <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center' }}>
+                    <td style={{ border: '1px solid #cbd5e1', padding: '4px 6px', textAlign: 'center' }}>
                       {val !== undefined ? `${val} ซม.` : '.............. ซม.'}
                     </td>
-                    <td style={{ border: '1px solid #cbd5e1', padding: '2px 4px', textAlign: 'center' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', marginRight: '6px' }}>
-                        <span style={{ width: '9px', height: '9px', border: '1px solid #334155', display: 'inline-block' }}></span> ผ่าน
+                    <td style={{ border: '1px solid #cbd5e1', padding: '4px 6px', textAlign: 'center' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', marginRight: '8px' }}>
+                        <span
+                          style={{
+                            width: '10px',
+                            height: '10px',
+                            border: '1px solid #334155',
+                            display: 'inline-block',
+                            borderRadius: '1px',
+                          }}
+                        ></span>{' '}
+                        ผ่าน
                       </span>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
-                        <span style={{ width: '9px', height: '9px', border: '1px solid #334155', display: 'inline-block' }}></span> แก้ไข
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                        <span
+                          style={{
+                            width: '10px',
+                            height: '10px',
+                            border: '1px solid #334155',
+                            display: 'inline-block',
+                            borderRadius: '1px',
+                          }}
+                        ></span>{' '}
+                        แก้ไข
                       </span>
                     </td>
                   </tr>
@@ -346,28 +459,47 @@ export const PrintCutSheet: React.FC<PrintCutSheetProps> = ({
         </div>
 
         {/* ========================================================= */}
-        {/* 6. SIGNATURE BLOCK (COMPACT 2 COLUMNS)                    */}
+        {/* 6. NOTES & SIGNATURE BLOCK (STAFF กลุ่ม & ผู้ตรวจ QC)     */}
         {/* ========================================================= */}
+        <div
+          style={{
+            border: '1px dashed #cbd5e1',
+            borderRadius: '4px',
+            padding: '3px 8px',
+            fontSize: '7pt',
+            color: '#475569',
+            marginBottom: '8px',
+            background: '#fafafa',
+          }}
+        >
+          <strong>หมายเหตุเพิ่มเติม / ข้อควรระวัง:</strong>{' '}
+          {measurements.notes ||
+            '..................................................................................................................................................................................................................................'}
+        </div>
+
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: '15px',
-            marginTop: '6px',
-            paddingTop: '4px',
+            gap: '20px',
+            paddingTop: '8px',
             borderTop: '1px solid #94a3b8',
-            fontSize: '7.5pt',
+            fontSize: '7.8pt',
             textAlign: 'center',
           }}
         >
           <div>
-            <div>ลงชื่อ .............................................................. ช่างผู้ตัดประกอบ</div>
-            <div style={{ marginTop: '2px' }}>({measurements.staffName || '........................................................'})</div>
+            <div>
+              ลงชื่อ .............................................................. <strong>Staff กลุ่ม</strong>
+            </div>
+            <div style={{ marginTop: '3px', color: '#334155' }}>( .............................................................. )</div>
             <div style={{ marginTop: '2px', color: '#64748b', fontSize: '7pt' }}>วันที่ ........ / ........ / ................</div>
           </div>
           <div>
-            <div>ลงชื่อ .............................................................. ผู้ตรวจ QC / สัตวแพทย์</div>
-            <div style={{ marginTop: '2px' }}>( .............................................................. )</div>
+            <div>
+              ลงชื่อ .............................................................. <strong>ผู้ตรวจ QC</strong>
+            </div>
+            <div style={{ marginTop: '3px', color: '#334155' }}>( .............................................................. )</div>
             <div style={{ marginTop: '2px', color: '#64748b', fontSize: '7pt' }}>วันที่ ........ / ........ / ................</div>
           </div>
         </div>
