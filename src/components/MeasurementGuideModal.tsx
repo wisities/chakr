@@ -80,7 +80,7 @@ export const MeasurementGuideModal: React.FC<MeasurementGuideModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="card animate-fade-in"
+        className="card animate-fade-in modal-card-mobile"
         style={{
           maxWidth: '860px',
           width: '100%',

@@ -296,3 +296,133 @@ input, select, textarea {
 .animate-fade-in {
   animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ========================================================= */
+/* MOBILE RESPONSIVE ENHANCEMENTS (รองรับมือถือและแท็บเล็ต)   */
+/* ========================================================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .card {
+    padding: 1rem 0.85rem;
+    border-radius: var(--radius-md);
+  }
+
+  .card-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-size: 1.05rem;
+  }
+
+  /* Prevent iOS zoom on input focus by ensuring at least 16px font size */
+  .input-field {
+    font-size: 16px !important;
+    padding: 0.55rem 0.75rem;
+  }
+
+  /* Header mobile layout */
+  .header-container {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important;
+  }
+
+  .header-brand {
+    justify-content: flex-start !important;
+  }
+
+  .header-brand h1 {
+    font-size: 0.95rem !important;
+  }
+
+  .header-toolbar {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding-bottom: 4px !important;
+    gap: 0.4rem !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+  }
+
+  .header-toolbar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Stepper mobile scroll */
+  .stepper-container {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 0.5rem !important;
+    padding-bottom: 4px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .stepper-container::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .stepper-card {
+    padding: 0.65rem 0.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .stepper-item {
+    min-width: 140px !important;
+    flex-shrink: 0 !important;
+    padding: 0.45rem 0.6rem !important;
+  }
+
+  .stepper-item-desc {
+    display: none !important;
+  }
+
+  /* Responsive QC Item Card */
+  .qc-item-card {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Responsive buttons */
+  .btn-mobile-full {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Table touch scroll */
+  .table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 0 -0.85rem;
+    padding: 0 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-brand h1 {
+    font-size: 0.88rem !important;
+  }
+
+  .header-toolbar .btn {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .modal-card-mobile {
+    padding: 1.1rem 0.85rem !important;
+    max-height: 94vh !important;
+  }
+
+  .login-card {
+    padding: 1.5rem 1.15rem !important;
+  }
+}
+

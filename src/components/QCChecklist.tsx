@@ -158,6 +158,7 @@ export const QCChecklist: React.FC<QCChecklistProps> = ({
         {evaluationResults.map((item) => (
           <div
             key={item.id}
+            className="qc-item-card"
             style={{
               border: item.isPassed
                 ? '1.5px solid #10b981'

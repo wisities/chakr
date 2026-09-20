@@ -44,10 +44,10 @@ export const Header: React.FC<HeaderProps> = ({
       padding: '0.65rem 0',
       boxShadow: 'var(--shadow-sm)'
     }}>
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.6rem' }}>
+      <div className="container header-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.6rem' }}>
         
         {/* Brand & Project Info */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div className="header-brand" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div style={{
             width: '38px',
             height: '38px',
@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Quick Toolbar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+        <div className="header-toolbar" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
           
           {/* Preset Selector */}
           <div style={{

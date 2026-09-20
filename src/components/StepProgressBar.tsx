@@ -40,20 +40,20 @@ export const StepProgressBar: React.FC<StepProgressBarProps> = ({
   ];
 
   return (
-    <div className="no-print" style={{
-      background: 'var(--bg-card)',
-      border: '1px solid var(--border-color)',
-      borderRadius: 'var(--radius-lg)',
+    <div className="no-print card stepper-card" style={{
       padding: '0.85rem 1.25rem',
       marginBottom: '1.25rem',
       boxShadow: 'var(--shadow-sm)'
     }}>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '0.75rem',
-        alignItems: 'center'
-      }}>
+      <div
+        className="stepper-container"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '0.75rem',
+          alignItems: 'center'
+        }}
+      >
         {steps.map((step) => {
           const isActive = currentStep === step.number;
           const isCompleted = currentStep > step.number;
@@ -63,6 +63,7 @@ export const StepProgressBar: React.FC<StepProgressBarProps> = ({
             <button
               key={step.number}
               onClick={() => onSelectStep(step.number)}
+              className="stepper-item"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -119,13 +120,16 @@ export const StepProgressBar: React.FC<StepProgressBarProps> = ({
                 }}>
                   {step.number}. {step.title}
                 </div>
-                <div style={{
-                  fontSize: '0.725rem',
-                  color: 'var(--text-muted)',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden'
-                }}>
+                <div
+                  className="stepper-item-desc"
+                  style={{
+                    fontSize: '0.725rem',
+                    color: 'var(--text-muted)',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden'
+                  }}
+                >
                   {step.desc}
                 </div>
               </div>

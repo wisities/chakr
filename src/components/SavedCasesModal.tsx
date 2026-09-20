@@ -72,7 +72,7 @@ export const SavedCasesModal: React.FC<SavedCasesModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="card animate-fade-in"
+        className="card animate-fade-in modal-card-mobile"
         style={{
           maxWidth: '720px',
           width: '100%',

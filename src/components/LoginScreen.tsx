@@ -123,7 +123,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       </button>
 
       <div
-        className="card animate-fade-in"
+        className="card animate-fade-in login-card"
         style={{
           maxWidth: '480px',
           width: '100%',

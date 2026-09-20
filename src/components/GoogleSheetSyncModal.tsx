@@ -153,7 +153,7 @@ export const GoogleSheetSyncModal: React.FC<GoogleSheetSyncModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="card animate-fade-in"
+        className="card animate-fade-in modal-card-mobile"
         style={{
           maxWidth: '780px',
           width: '100%',

@@ -210,7 +210,7 @@ export const Step1Measurements: React.FC<Step1MeasurementsProps> = ({
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border-color)',
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1.5fr',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '1rem',
           alignItems: 'center'
         }}>
@@ -358,7 +358,7 @@ export const Step1Measurements: React.FC<Step1MeasurementsProps> = ({
         </div>
 
         {/* Wheelchair Configuration (2 Wheels vs 4 Wheels) */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.75rem', marginBottom: '1.25rem' }}>
           <button
             type="button"
             onClick={() => onChangeWheelchairType('2_wheel')}
@@ -421,7 +421,7 @@ export const Step1Measurements: React.FC<Step1MeasurementsProps> = ({
         />
 
         {/* 6 Measurement Input Boxes */}
-        <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '1rem', marginBottom: '1rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3" style={{ gap: '0.85rem', marginBottom: '1rem' }}>
           
           {/* A */}
           <div
@@ -628,7 +628,7 @@ export const Step1Measurements: React.FC<Step1MeasurementsProps> = ({
           type="button"
           onClick={onNextStep}
           disabled={!isFormValid}
-          className="btn btn-primary"
+          className="btn btn-primary btn-mobile-full"
           style={{
             padding: '0.75rem 1.75rem',
             fontSize: '1rem',

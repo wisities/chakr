@@ -96,11 +96,11 @@ export const Step2CutParts: React.FC<Step2CutPartsProps> = ({
       </div>
 
       {/* Navigation Footer */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.5rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', paddingTop: '0.5rem' }}>
         <button
           type="button"
           onClick={onPrevStep}
-          className="btn btn-secondary"
+          className="btn btn-secondary btn-mobile-full"
           style={{ padding: '0.65rem 1.25rem', fontSize: '0.95rem' }}
         >
           <ArrowLeft size={16} />
@@ -110,7 +110,7 @@ export const Step2CutParts: React.FC<Step2CutPartsProps> = ({
         <button
           type="button"
           onClick={onNextStep}
-          className="btn btn-primary"
+          className="btn btn-primary btn-mobile-full"
           style={{ padding: '0.75rem 1.75rem', fontSize: '1rem', boxShadow: 'var(--shadow-md)' }}
         >
           <span>ถัดไป: สรุปอุปกรณ์ & ท่อ PVC</span>
