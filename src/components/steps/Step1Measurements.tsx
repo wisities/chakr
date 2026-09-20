@@ -19,6 +19,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { determinePipeSize, PIPE_CONSTANTS_MAP } from '../../utils/calculations';
+import { AnimalMeasurementDiagram } from '../AnimalMeasurementDiagram';
 
 interface Step1MeasurementsProps {
   measurements: AnimalMeasurements;
@@ -410,6 +411,14 @@ export const Step1Measurements: React.FC<Step1MeasurementsProps> = ({
             {wheelchairType === '4_wheel' && <span className="badge badge-primary">เลือกอยู่</span>}
           </button>
         </div>
+
+        {/* Visual Animal Measurement Diagram (Side & Front Views) */}
+        <AnimalMeasurementDiagram
+          activeField={activeMeasurementTab}
+          onSelectField={(field) => setActiveMeasurementTab(field)}
+          measurements={measurements}
+          showToggle={true}
+        />
 
         {/* 6 Measurement Input Boxes */}
         <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: '1rem', marginBottom: '1rem' }}>
