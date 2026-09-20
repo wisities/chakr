@@ -321,36 +321,38 @@ export const GoogleSheetSyncModal: React.FC<GoogleSheetSyncModalProps> = ({
           )}
         </div>
 
-        {/* Web App URL Configuration */}
-        <div style={{
-          borderTop: '1px solid var(--border-color)',
-          paddingTop: '1rem',
-          fontSize: '0.85rem'
-        }}>
-          <label className="form-label" style={{ fontWeight: 600 }}>
-            Google Apps Script Web App URL (Endpoint):
-          </label>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <input
-              type="url"
-              className="input-field"
-              placeholder="https://script.google.com/macros/s/.../exec"
-              value={scriptUrl}
-              onChange={(e) => setScriptUrlInput(e.target.value)}
-              style={{ fontSize: '0.85rem' }}
-            />
-            <button
-              onClick={handleSaveUrl}
-              className="btn btn-secondary"
-              style={{ whiteSpace: 'nowrap' }}
-            >
-              {saveSuccess ? 'บันทึกแล้ว!' : 'บันทึก URL'}
-            </button>
+        {/* Web App URL Configuration - ซ่อนจากหน้าจอเมื่อระบบมี URL อยู่แล้ว */}
+        {!scriptUrl && (
+          <div style={{
+            borderTop: '1px solid var(--border-color)',
+            paddingTop: '1rem',
+            fontSize: '0.85rem'
+          }}>
+            <label className="form-label" style={{ fontWeight: 600 }}>
+              Google Apps Script Web App URL (Endpoint):
+            </label>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <input
+                type="url"
+                className="input-field"
+                placeholder="https://script.google.com/macros/s/.../exec"
+                value={scriptUrl}
+                onChange={(e) => setScriptUrlInput(e.target.value)}
+                style={{ fontSize: '0.85rem' }}
+              />
+              <button
+                onClick={handleSaveUrl}
+                className="btn btn-secondary"
+                style={{ whiteSpace: 'nowrap' }}
+              >
+                {saveSuccess ? 'บันทึกแล้ว!' : 'บันทึก URL'}
+              </button>
+            </div>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
+              (โค้ดสคริปต์อยู่ในไฟล์ <code>google_apps_script.js</code> นำไปวางใน Extensions &gt; Apps Script ของ Google Sheet แล้วกด Deploy เป็น Web App)
+            </p>
           </div>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
-            (โค้ดสคริปต์อยู่ในไฟล์ <code>google_apps_script.js</code> นำไปวางใน Extensions &gt; Apps Script ของ Google Sheet แล้วกด Deploy เป็น Web App)
-          </p>
-        </div>
+        )}
 
       </div>
     </div>

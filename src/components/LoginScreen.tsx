@@ -264,27 +264,29 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
           )}
         </div>
 
-        {/* Collapsible Client ID Settings */}
+        {/* Collapsible Client ID Settings (ซ่อนจากหน้าจอเมื่อระบบมี Client ID แล้ว) */}
         <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <button
-              type="button"
-              onClick={() => setShowConfig(!showConfig)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--text-muted)',
-                fontSize: '0.78rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.3rem',
-                padding: 0,
-              }}
-            >
-              <Settings size={13} />
-              <span>{showConfig ? 'ซ่อนการตั้งค่า Client ID' : 'เปลี่ยน/แก้ไข Google Client ID'}</span>
-            </button>
+          <div style={{ display: 'flex', justifyContent: !clientId ? 'space-between' : 'flex-end', alignItems: 'center' }}>
+            {!clientId && (
+              <button
+                type="button"
+                onClick={() => setShowConfig(!showConfig)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-muted)',
+                  fontSize: '0.78rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.3rem',
+                  padding: 0,
+                }}
+              >
+                <Settings size={13} />
+                <span>{showConfig ? 'ซ่อนการตั้งค่า Client ID' : 'ระบุ Google Client ID'}</span>
+              </button>
+            )}
 
             <button
               type="button"
@@ -302,7 +304,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             </button>
           </div>
 
-          {showConfig && (
+          {!clientId && showConfig && (
             <div
               style={{
                 marginTop: '0.75rem',

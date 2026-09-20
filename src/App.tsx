@@ -357,13 +357,11 @@ export function App() {
         {/* Sticky Header */}
         <Header
           darkMode={darkMode}
-          isSavingSheet={isSavingSheet}
           userProfile={currentUser}
           onLogout={handleLogout}
           onToggleTheme={() => setDarkMode(!darkMode)}
           onOpenSavedCases={() => setIsSavedCasesOpen(true)}
           onOpenGoogleSheetSync={() => setIsGoogleSheetSyncOpen(true)}
-          onSaveToGoogleSheet={handleSaveToGoogleSheet}
           onPrint={handlePrint}
           onLoadPreset={handleLoadPreset}
         />

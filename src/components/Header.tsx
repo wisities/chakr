@@ -7,8 +7,6 @@ import {
   HeartHandshake,
   Database,
   Sparkles,
-  CloudUpload,
-  RefreshCw,
   LogOut,
   User,
 } from 'lucide-react';
@@ -16,26 +14,22 @@ import { UserProfile } from '../utils/auth';
 
 interface HeaderProps {
   darkMode: boolean;
-  isSavingSheet: boolean;
   userProfile: UserProfile | null;
   onLogout: () => void;
   onToggleTheme: () => void;
   onOpenSavedCases: () => void;
   onOpenGoogleSheetSync: () => void;
-  onSaveToGoogleSheet: () => void;
   onPrint: () => void;
   onLoadPreset: (preset: 'small_cat' | 'small_dog' | 'medium_dog' | 'large_dog') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   darkMode,
-  isSavingSheet,
   userProfile,
   onLogout,
   onToggleTheme,
   onOpenSavedCases,
   onOpenGoogleSheetSync,
-  onSaveToGoogleSheet,
   onPrint,
   onLoadPreset,
 }) => {
@@ -123,22 +117,6 @@ export const Header: React.FC<HeaderProps> = ({
               <option value="large_dog">สุนัขใหญ่ (18 กก. - 6 หุน)</option>
             </select>
           </div>
-
-          {/* Save to Google Sheet Button */}
-          <button
-            onClick={onSaveToGoogleSheet}
-            disabled={isSavingSheet}
-            className="btn btn-success"
-            title="บันทึกข้อมูลลง Google Sheet ของโครงการ"
-            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}
-          >
-            {isSavingSheet ? (
-              <RefreshCw size={14} className="animate-spin" />
-            ) : (
-              <CloudUpload size={14} />
-            )}
-            <span>{isSavingSheet ? 'กำลังส่ง...' : 'บันทึก Google Sheet'}</span>
-          </button>
 
           {/* Search/Sync Google Sheet */}
           <button
