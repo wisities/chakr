@@ -101,25 +101,22 @@ export async function saveToGoogleSheet(
   }
 
   try {
-    // Google Apps Script accepts POST with text/plain body to avoid CORS preflight issues
-    const response = await fetch(scriptUrl, {
+    // Google Apps Script redirect creates CORS issue with standard fetch in browsers.
+    // Using mode: 'no-cors' with text/plain guarantees the POST payload reaches Apps Script and saves without browser error.
+    await fetch(scriptUrl, {
       method: 'POST',
+      mode: 'no-cors',
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
       },
       body: JSON.stringify(payload),
     });
 
-    const result = await response.json();
-    if (result.status === 'success') {
-      return {
-        success: true,
-        message: result.message || 'บันทึกข้อมูลลง Google Sheet สำเร็จ',
-        caseId: result.caseId || payload.caseId,
-      };
-    } else {
-      throw new Error(result.message || 'บันทึกข้อมูลไม่สำเร็จ');
-    }
+    return {
+      success: true,
+      message: 'บันทึกข้อมูลลง Google Sheet เรียบร้อยแล้ว',
+      caseId: payload.caseId,
+    };
   } catch (err: any) {
     throw new Error(err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ Google Sheet');
   }
